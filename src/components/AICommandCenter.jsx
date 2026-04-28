@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrainCircuit, Truck, Zap, AlertTriangle, TrendingUp, Droplets, Shield, CloudRain, MessageSquareWarning } from 'lucide-react';
-import { allocateTankers, predictCrisis, detectLeakages, detectTheft, analyzeRainwater } from '../services/geminiService';
+import { allocateTankers, predictCrisis, detectLeakages, detectTheft, analyzeRainwater, analyzeComplaints } from '../services/geminiService';
 
 function AITab({ label, icon: Icon, active, onClick }) {
   return (
@@ -197,7 +197,32 @@ function RainwaterView({ result }) {
   );
 }
 
-export function AICommandCenter({ data }) {
+function ComplaintView({ result }) {
+  return (
+    <div className="space-y-4">
+      <div className="bg-city-darker rounded-lg p-4 border border-slate-800">
+        <p className="text-slate-300 text-sm">{result.summary}</p>
+      </div>
+      {result.prioritizedComplaints.map((c, i) => (
+        <div key={i} className={`bg-slate-900/50 border rounded-lg p-4 ${c.validatedUrgency === 'Critical' ? 'border-critical-red/30' : c.validatedUrgency === 'High' ? 'border-warning-yellow/30' : 'border-slate-800'}`}>
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-white font-bold">{c.id} - {c.zone}</span>
+            <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded-full ${c.validatedUrgency === 'Critical' ? 'bg-critical-red/20 text-critical-red' : c.validatedUrgency === 'High' ? 'bg-warning-yellow/20 text-warning-yellow' : 'bg-slate-800 text-slate-400'}`}>
+              {c.validatedUrgency}
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 mb-2">Type: {c.type}</p>
+          <div className="space-y-2 bg-city-darker/50 p-3 rounded-lg mb-2">
+            <p className="text-xs text-slate-300"><span className="text-slate-500 font-semibold">AI Reasoning:</span> {c.aiReasoning}</p>
+          </div>
+          <p className="text-xs text-google-blue font-medium mt-2">→ Action: {c.recommendedResponse}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function AICommandCenter({ data, complaints }) {
   const [activeTab, setActiveTab] = useState('allocate');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState({});
@@ -208,6 +233,7 @@ export function AICommandCenter({ data }) {
     { id: 'leakage', label: 'Leakage Detection', icon: Droplets },
     { id: 'theft', label: 'Theft Detection', icon: Shield },
     { id: 'rainwater', label: 'Rainwater Harvest', icon: CloudRain },
+    { id: 'complaints', label: 'Complaint Intel', icon: MessageSquareWarning },
   ];
 
   const runAnalysis = async () => {
@@ -219,6 +245,7 @@ export function AICommandCenter({ data }) {
       case 'leakage': result = await detectLeakages(data); break;
       case 'theft': result = await detectTheft(data); break;
       case 'rainwater': result = await analyzeRainwater(data); break;
+      case 'complaints': result = await analyzeComplaints(complaints); break;
     }
     setResults(prev => ({ ...prev, [activeTab]: result }));
     setLoading(false);
@@ -275,6 +302,7 @@ export function AICommandCenter({ data }) {
            activeTab === 'predict' ? <PredictionView result={currentResult} /> :
            activeTab === 'leakage' ? <LeakageView result={currentResult} /> :
            activeTab === 'theft' ? <TheftView result={currentResult} /> :
+           activeTab === 'complaints' ? <ComplaintView result={currentResult} /> :
            <RainwaterView result={currentResult} />
           }
         </div>

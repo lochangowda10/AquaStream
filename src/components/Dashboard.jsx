@@ -8,6 +8,7 @@ import { ForecastAnalytics } from './ForecastAnalytics';
 import { CitizenComplaints } from './CitizenComplaints';
 import { SustainabilityDashboard } from './SustainabilityDashboard';
 import { ArchitectureDiagram } from './ArchitectureDiagram';
+import { SmartCityMap } from './SmartCityMap';
 import { MapPin, Activity } from 'lucide-react';
 
 export function Dashboard() {
@@ -31,6 +32,9 @@ export function Dashboard() {
           data={data}
         />
 
+        {/* Smart City Live Map */}
+        <SmartCityMap data={data} />
+
         {/* Zone Monitoring */}
         <section className="space-y-4">
           <div className="flex items-center gap-3">
@@ -47,7 +51,7 @@ export function Dashboard() {
         </section>
 
         {/* AI Command Intelligence */}
-        <AICommandCenter data={data} />
+        <AICommandCenter data={data} complaints={complaints} />
 
         {/* Forecast & Analytics */}
         <ForecastAnalytics historicalData={historicalData} data={data} />
