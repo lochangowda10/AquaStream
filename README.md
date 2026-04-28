@@ -1,7 +1,11 @@
 # AquaStream AI 🌊
+**AI-Powered Urban Water Crisis Prevention & Smart Resource Allocation Platform**
 
-**AI-Powered Urban Water Crisis Prevention & Smart Resource Allocation Platform**  
-*Built for Bengaluru Smart Cities Mission*
+---
+
+### 🏆 Built for Google Solution Challenge 2026 
+**Theme:** Smart Resource Allocation for Urban Sustainability  
+**Focus:** Bengaluru Smart Cities Mission
 
 ---
 
