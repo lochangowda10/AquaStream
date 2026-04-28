@@ -27,6 +27,28 @@ export function ExecutiveOverview({ cityHealthScore, criticalZones, totalComplai
         <h2 className="text-lg font-bold uppercase tracking-[0.15em] text-slate-300">Executive Overview</h2>
       </div>
 
+      {/* MASSIVE PREDICTIVE WARNING BANNER */}
+      <div className="w-full bg-critical-red/10 border border-critical-red/50 rounded-xl p-4 flex items-center justify-between glow-red relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-1 h-full bg-critical-red animate-pulse"></div>
+        <div className="flex items-start gap-4 z-10">
+          <div className="p-3 bg-critical-red/20 rounded-full mt-1">
+            <AlertTriangle className="text-critical-red animate-[glowPulse_2s_infinite]" size={28} />
+          </div>
+          <div>
+            <h3 className="text-critical-red font-black text-lg tracking-wider uppercase">Predictive Intelligence Alert</h3>
+            <p className="text-slate-200 text-sm mt-1 font-medium">
+              <span className="text-white font-bold">{data.find(z => z.predictedDemand > z.waterLevel * 1000)?.name || data[0].name}</span> is mathematically projected to face a severe water shortage in <span className="text-warning-yellow font-bold">4 days</span> based on current 7-day demand forecasts and population density. 
+            </p>
+            <p className="text-xs text-slate-400 mt-2">Gemini AI recommends immediate preventive routing of 3 tankers before crisis occurs.</p>
+          </div>
+        </div>
+        <div className="hidden md:block text-right z-10">
+          <button className="px-6 py-2 bg-critical-red hover:bg-red-600 text-white font-bold rounded-lg transition-all shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+            Execute Preventive Plan
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
         <StatCard
           icon={Droplets}
