@@ -5,12 +5,6 @@ const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
 const genAI = new GoogleGenerativeAI(apiKey);
 
 export async function allocateTankers(neighborhoodData) {
-  if (!apiKey) {
-    return {
-      error: "Gemini API key is missing. Please add VITE_GEMINI_API_KEY to your .env file.",
-    };
-  }
-
   try {
     // Specify the model, gemini-1.5-flash-latest is extremely fast and suitable for this task
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
