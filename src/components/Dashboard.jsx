@@ -1,68 +1,78 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useWaterData } from '../hooks/useWaterData';
-import { NeighborhoodCard } from './NeighborhoodCard';
-import { InsightCard } from './InsightCard';
-import { allocateTankers } from '../services/geminiService';
-import { Activity, Satellite, Zap } from 'lucide-react';
+import { Header } from './Header';
+import { ExecutiveOverview } from './ExecutiveOverview';
+import { ZoneCard } from './ZoneCard';
+import { AICommandCenter } from './AICommandCenter';
+import { ForecastAnalytics } from './ForecastAnalytics';
+import { CitizenComplaints } from './CitizenComplaints';
+import { SustainabilityDashboard } from './SustainabilityDashboard';
+import { ArchitectureDiagram } from './ArchitectureDiagram';
+import { MapPin, Activity } from 'lucide-react';
 
 export function Dashboard() {
-  const { data } = useWaterData();
-  const [insights, setInsights] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleSmartDispatch = async () => {
-    setLoading(true);
-    // Send current snapshot of data to Gemini
-    const result = await allocateTankers(data);
-    setInsights(result);
-    setLoading(false);
-  };
+  const {
+    data, complaints, historicalData, lastUpdated,
+    cityHealthScore, criticalZones, totalComplaints, tankersAvailable
+  } = useWaterData();
 
   return (
-    <div className="min-h-screen bg-city-darker bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-[#020617] to-[#020617] p-4 md:p-8">
-      
-      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-        <div>
-          <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-google-blue to-purple-400 tracking-tight flex items-center gap-3">
-            <Satellite className="text-google-blue" size={40} />
-            AquaStream AI
-          </h1>
-          <p className="text-slate-400 mt-2 font-medium tracking-wide flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-safe-green animate-pulse"></span>
-            Bengaluru City Command Center
+    <div className="min-h-screen">
+      <Header lastUpdated={lastUpdated} />
+
+      <main className="max-w-[1600px] mx-auto px-4 md:px-8 py-6 space-y-8">
+
+        {/* Executive Overview */}
+        <ExecutiveOverview
+          cityHealthScore={cityHealthScore}
+          criticalZones={criticalZones}
+          totalComplaints={totalComplaints}
+          tankersAvailable={tankersAvailable}
+          data={data}
+        />
+
+        {/* Zone Monitoring */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-3">
+            <MapPin size={18} className="text-google-blue" />
+            <h2 className="text-lg font-bold uppercase tracking-[0.15em] text-slate-300">Live Zone Monitoring</h2>
+            <span className="flex items-center gap-1.5 text-[10px] text-safe-green font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-safe-green animate-pulse"></span>
+              REAL-TIME
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data.map(zone => <ZoneCard key={zone.id} zone={zone} />)}
+          </div>
+        </section>
+
+        {/* AI Command Intelligence */}
+        <AICommandCenter data={data} />
+
+        {/* Forecast & Analytics */}
+        <ForecastAnalytics historicalData={historicalData} data={data} />
+
+        {/* Citizen Complaint Center */}
+        <CitizenComplaints complaints={complaints} />
+
+        {/* Sustainability Impact */}
+        <SustainabilityDashboard data={data} />
+
+        {/* Architecture Diagram */}
+        <ArchitectureDiagram />
+
+        {/* Footer */}
+        <footer className="border-t border-slate-800/50 pt-6 pb-8 text-center">
+          <p className="text-gradient-blue font-bold text-lg">AquaStream AI</p>
+          <p className="text-xs text-slate-600 mt-1">
+            AI-Powered Urban Water Crisis Prevention & Smart Resource Allocation Platform
           </p>
-        </div>
+          <p className="text-[10px] text-slate-700 mt-2">
+            Bengaluru Smart Cities Mission • Powered by Google Gemini AI • Built for Google Solution Challenge 2026
+          </p>
+        </footer>
 
-        <button 
-          onClick={handleSmartDispatch}
-          disabled={loading}
-          className="group relative px-6 py-3 font-bold text-white rounded-lg bg-google-blue hover:bg-blue-600 transition-all shadow-[0_0_20px_rgba(66,133,244,0.4)] hover:shadow-[0_0_30px_rgba(66,133,244,0.6)] disabled:opacity-70 disabled:cursor-not-allowed overflow-hidden"
-        >
-          <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-          <span className="flex items-center gap-2 relative z-10">
-            <Zap size={18} className={loading ? "animate-pulse" : ""} />
-            {loading ? "Processing..." : "Run Smart Dispatch"}
-          </span>
-        </button>
-      </header>
-
-      <main className="max-w-7xl mx-auto space-y-8">
-        
-        <div className="flex items-center gap-2 text-slate-300 border-b border-slate-800 pb-2">
-          <Activity size={20} className="text-google-blue" />
-          <h2 className="text-xl font-semibold uppercase tracking-widest">Live Sector Telemetry</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.map(zone => (
-            <NeighborhoodCard key={zone.id} data={zone} />
-          ))}
-        </div>
-
-        <InsightCard insights={insights} loading={loading} />
-        
       </main>
-      
     </div>
   );
 }

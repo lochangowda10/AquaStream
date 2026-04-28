@@ -1,37 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 @theme {
   --color-google-blue: #4285F4;
+  --color-google-blue-dark: #3367D6;
   --color-city-dark: #0F172A;
   --color-city-darker: #020617;
+  --color-city-card: #0B1120;
   --color-critical-red: #EF4444;
   --color-safe-green: #10B981;
   --color-warning-yellow: #F59E0B;
+  --color-purple-accent: #8B5CF6;
+  --color-cyan-accent: #06B6D4;
+  --color-pink-accent: #EC4899;
 }
 
 @layer base {
+  * {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
   body {
     @apply bg-city-darker text-slate-200 antialiased;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(66, 133, 244, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 100%, rgba(6, 182, 212, 0.02) 0%, transparent 50%);
   }
 }
 
 @layer utilities {
   .glass-panel {
-    @apply bg-city-dark/80 backdrop-blur-md border border-slate-700/50 shadow-xl;
+    background: rgba(11, 17, 32, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
+  .glass-panel-hover:hover {
+    border-color: rgba(66, 133, 244, 0.3);
+    box-shadow: 0 8px 32px rgba(66, 133, 244, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(66, 133, 244, 0.3), 0 0 60px rgba(66, 133, 244, 0.1);
+  }
+  .glow-red {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), 0 0 60px rgba(239, 68, 68, 0.15);
+  }
+  .glow-green {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+  }
+  .text-gradient-blue {
+    background: linear-gradient(135deg, #4285F4 0%, #8B5CF6 50%, #06B6D4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .animate-glow-pulse {
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
 }
 
-/* Custom scrollbar for modern feel */
-::-webkit-scrollbar {
-  width: 8px;
+@keyframes glowPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
-::-webkit-scrollbar-track {
-  background: #020617; 
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
-::-webkit-scrollbar-thumb {
-  background: #1e293b; 
-  border-radius: 4px;
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #334155; 
-}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #020617; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #334155; }
