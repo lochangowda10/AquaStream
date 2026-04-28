@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-google-blue: #4285F4;
+  --color-city-dark: #0F172A;
+  --color-city-darker: #020617;
+  --color-critical-red: #EF4444;
+  --color-safe-green: #10B981;
+  --color-warning-yellow: #F59E0B;
+}
+
+@layer base {
+  body {
+    @apply bg-city-darker text-slate-200 antialiased;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-city-dark/80 backdrop-blur-md border border-slate-700/50 shadow-xl;
+  }
+}
+
+/* Custom scrollbar for modern feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #020617; 
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155; 
+}
